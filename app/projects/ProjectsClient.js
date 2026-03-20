@@ -42,30 +42,20 @@ export default function ProjectsClient({ portfolio }) {
 
   return (
     <div className="page-shell">
-      {/* Header */}
       <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
         <div className="brand-block">
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div className="brand-avatar">م</div>
-            <div className="brand-info">
-              <strong>{settings.brandName}</strong>
-              <span className="brand-kicker">{settings.heroPrefix}</span>
-            </div>
+            <div className="brand-info"><strong>{settings.brandName}</strong></div>
           </Link>
         </div>
-
         <nav className={`top-nav ${isMenuOpen ? 'open' : ''}`}>
-          <Link href="/" onClick={() => setIsMenuOpen(false)}>الرئيسية</Link>
-          <Link href="/#about" onClick={() => setIsMenuOpen(false)}>عني</Link>
-          <Link href="/projects" onClick={() => setIsMenuOpen(false)}>المشاريع</Link>
-          <Link href="/contact" onClick={() => setIsMenuOpen(false)}>التواصل</Link>
+          <Link href="/">الرئيسية</Link>
+          <Link href="/projects" style={{ color: 'var(--primary)' }}>المشاريع</Link>
+          <Link href="/contact">التواصل</Link>
         </nav>
-
         <div className="nav-actions">
-           <button onClick={toggleTheme} className="theme-toggle" title="تبديل الوضع">
-            {theme === 'light' ? '🌙' : '☀️'}
-          </button>
-          <a href="/cv-mohammed-mustafa.pdf" download className="nav-cv-btn">تحميل الـ CV</a>
+          <button onClick={toggleTheme} className="theme-toggle">{theme === 'light' ? '🌙' : '☀️'}</button>
           <button className={`mobile-menu-toggle ${isMenuOpen ? 'open' : ''}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
             <span></span><span></span><span></span>
           </button>
@@ -73,27 +63,30 @@ export default function ProjectsClient({ portfolio }) {
       </header>
 
       <main style={{ padding: '60px 0' }}>
-        <div className="section-header reveal active" style={{ paddingTop: 0 }}>
-          <Link href="/" style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '8px', display: 'block' }}>← العودة للرئيسية</Link>
-          <h1 style={{ fontFamily: 'Cairo, sans-serif', fontSize: '2.8rem' }}>جميع المشاريع</h1>
-        </div>
-
+        <h1 className="reveal active" style={{ fontFamily: 'Cairo, sans-serif', fontSize: '2.8rem', marginBottom: '40px' }}>جميع المشاريع</h1>
         <div className="projects-grid">
           {portfolio.projects.map((project, idx) => (
-            <div key={project.id} className={`project-card reveal stagger-${(idx % 4) + 1}`}>
-              <div className="project-preview"><div style={{ padding: '20px', color: 'var(--text-muted)' }}>{project.name}</div></div>
+            <a 
+              key={project.id} 
+              href={`https://${project.domain || project.id}`} 
+              target="_blank" 
+              className={`project-card reveal stagger-${(idx % 4) + 1}`}
+              style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column' }}
+            >
+              <div className="project-preview"><div style={{ padding: '20px', color: 'var(--text-muted)' }}>إضغط للمشاهدة</div></div>
               <div className="project-body">
                 <h3>{project.name}</h3>
                 <p>{project.description || 'مشروع ويب متطور تم بناؤه باستخدام تقنيات حديثة.'}</p>
+                <div className="project-footer">
+                  <span className="project-link">زيارة الموقع ↑</span>
+                </div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </main>
 
-      <footer className="site-footer reveal">
-        <div>© 2026 {settings.brandName} — جميع الحقوق محفوظة</div>
-      </footer>
+      <footer className="site-footer reveal"><div>© 2026 {settings.brandName}</div></footer>
     </div>
   );
 }
