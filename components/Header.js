@@ -51,7 +51,7 @@ export default function Header({ settings, activePage }) {
         <Link href="/contact" className={activePage === 'contact' ? 'active' : ''} onClick={() => setIsMenuOpen(false)}>التواصل</Link>
         
         <div className="mobile-only-cv" style={{ display: 'none' }}>
-           <a href="/cv-mohammed-mustafa.pdf" download className="btn-primary">تحميل الـ CV</a>
+           <Link href="/cv" className="btn-primary">عرض الـ CV</Link>
         </div>
       </nav>
 
@@ -60,7 +60,7 @@ export default function Header({ settings, activePage }) {
           {theme === 'light' ? '🌙' : '☀️'}
         </button>
         
-        <a href="/cv-mohammed-mustafa.pdf" download className="nav-cv-btn">تحميل الـ CV</a>
+        <Link href="/cv" className="nav-cv-btn">عرض الـ CV</Link>
         
         <button 
           className={`mobile-menu-toggle ${isMenuOpen ? 'open' : ''}`} 

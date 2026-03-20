@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAdminSession } from "@/lib/admin-auth";
-import { DEFAULT_PORTFOLIO_SETTINGS } from "@/lib/constants";
+import { DEFAULT_PORTFOLIO_SETTINGS, DEFAULT_CV_SETTINGS } from "@/lib/constants";
 import {
   readConfig,
   sanitizeConfig,
@@ -112,6 +112,12 @@ export async function POST(request) {
         contactEmail:
           body.portfolio?.contactEmail?.trim() || DEFAULT_PORTFOLIO_SETTINGS.contactEmail,
         siteUrl: body.portfolio?.siteUrl?.trim() || ""
+      },
+      cv: {
+        education: body.cv?.education || DEFAULT_CV_SETTINGS.education,
+        experience: body.cv?.experience || DEFAULT_CV_SETTINGS.experience,
+        skills: body.cv?.skills || DEFAULT_CV_SETTINGS.skills,
+        languages: body.cv?.languages || DEFAULT_CV_SETTINGS.languages
       },
       updatedAt: new Date().toISOString()
     };

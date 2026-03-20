@@ -65,7 +65,22 @@ export default function HomeClient({ portfolio }) {
               className={`project-card reveal stagger-${(idx % 4) + 1}`}
               style={{ cursor: 'pointer' }}
             >
-              <div className="project-preview"><div style={{ padding: '20px', color: 'var(--text-muted)', fontSize: '0.8rem' }}>إضغط للمشاهدة</div></div>
+              <div className="project-preview">
+                {project.previewImage ? (
+                  <img 
+                    src={project.previewImage} 
+                    alt={project.name} 
+                    loading="lazy" 
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                ) : null}
+                <div className="project-preview-abstract" style={{ display: project.previewImage ? 'none' : 'flex' }}>
+                   <span>{project.name?.substring(0, 2).toUpperCase() || 'PRJ'}</span>
+                </div>
+              </div>
               <div className="project-body">
                 <h3>{project.name}</h3>
                 <p>{project.description}</p>
