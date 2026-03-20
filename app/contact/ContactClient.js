@@ -36,24 +36,27 @@ export default function ContactClient({ portfolio }) {
     document.documentElement.setAttribute('data-theme', newTheme);
   };
 
-  if (!portfolio || !mounted) return <div style={{ minHeight: '100vh', background: 'var(--bg)' }} />;
+  // Hydration guard
+  if (!mounted) return <div style={{ minHeight: '100vh', background: '#ffffff' }} />;
 
-  const settings = portfolio.portfolio;
-  const whatsappNumber = "964770000000"; // Placeholder, can be mapped from data if available
+  const settings = portfolio?.portfolio || {};
+  const whatsappNumber = "964770000000"; 
 
   return (
-    <div className="page-shell">
+    <div className={`page-shell ${isMenuOpen ? 'menu-open' : ''}`}>
       <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
         <div className="brand-block">
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div className="brand-avatar">م</div>
-            <div className="brand-info"><strong>{settings.brandName}</strong></div>
+            <div className="brand-info">
+              <strong>{settings.brandName || 'م. محمد مصطفى'}</strong>
+            </div>
           </Link>
         </div>
         <nav className={`top-nav ${isMenuOpen ? 'open' : ''}`}>
-          <Link href="/">الرئيسية</Link>
-          <Link href="/projects">المشاريع</Link>
-          <Link href="/contact" style={{ color: 'var(--primary)' }}>التواصل</Link>
+          <Link href="/" onClick={() => setIsMenuOpen(false)}>الرئيسية</Link>
+          <Link href="/projects" onClick={() => setIsMenuOpen(false)}>المشاريع</Link>
+          <Link href="/contact" style={{ color: 'var(--primary)' }} onClick={() => setIsMenuOpen(false)}>التواصل</Link>
         </nav>
         <div className="nav-actions">
           <button onClick={toggleTheme} className="theme-toggle">{theme === 'light' ? '🌙' : '☀️'}</button>
@@ -63,84 +66,128 @@ export default function ContactClient({ portfolio }) {
         </div>
       </header>
 
-      <main style={{ padding: '60px 0' }}>
-         <h1 className="reveal active" style={{ fontFamily: 'Cairo, sans-serif', fontSize: '3rem', marginBottom: '40px' }}>تواصل معي</h1>
+      <main className="contact-main">
+         <div className="contact-header reveal active">
+            <h1>تواصل معي</h1>
+            <p>أنا متاح دائماً للمناقشة حول مشاريعكم ومقترحاتكم</p>
+         </div>
 
-         <div className="contact-grid-wrapper" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
-            {/* Info Section */}
-            <div className="reveal stagger-1" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+         <div className="contact-container reveal">
+            <div className="contact-info-list staggered">
                
-               <a href={`mailto:${settings.contactEmail}`} className="contact-card-link">
-                  <div className="contact-card-content">
-                     <span className="contact-icon">📧</span>
-                     <div className="contact-text">
-                        <small>البريد الإلكتروني</small>
-                        <strong>{settings.contactEmail}</strong>
-                     </div>
+               <a href={`mailto:${settings.contactEmail}`} className="contact-hub-card reveal stagger-1">
+                  <div className="hub-icon">📧</div>
+                  <div className="hub-details">
+                     <span className="hub-label">البريد الإلكتروني</span>
+                     <span className="hub-value">{settings.contactEmail}</span>
                   </div>
                </a>
 
-               <a href={`https://wa.me/${whatsappNumber}`} target="_blank" className="contact-card-link">
-                  <div className="contact-card-content">
-                     <span className="contact-icon" style={{ background: '#25cf43', color: 'white' }}>💬</span>
-                     <div className="contact-text">
-                        <small>واتساب</small>
-                        <strong>تحدث معي الآن</strong>
-                     </div>
+               <a href={`https://wa.me/${whatsappNumber}`} target="_blank" className="contact-hub-card reveal stagger-2">
+                  <div className="hub-icon" style={{ background: '#25D366', color: 'white' }}>💬</div>
+                  <div className="hub-details">
+                     <span className="hub-label">واتساب</span>
+                     <span className="hub-value">تحدث معي مباشرة</span>
                   </div>
                </a>
 
-               <div style={{ display: 'flex', gap: '16px', marginTop: '20px' }}>
-                  <a href="https://linkedin.com" target="_blank" className="social-btn">LinkedIn</a>
-                  <a href="https://github.com" target="_blank" className="social-btn">GitHub</a>
+               <div className="social-links-grid reveal stagger-3">
+                  <a href="https://linkedin.com" target="_blank" className="social-link-item">
+                     <span>LinkedIn</span>
+                  </a>
+                  <a href="https://github.com" target="_blank" className="social-link-item">
+                     <span>GitHub</span>
+                  </a>
+                  <a href="https://twitter.com" target="_blank" className="social-link-item">
+                     <span>Twitter / X</span>
+                  </a>
                </div>
-            </div>
 
-            {/* Form Section */}
-            <div className="reveal stagger-2" style={{ padding: '40px', background: 'var(--bg-soft)', borderRadius: '24px', border: '1px solid var(--surface-border)' }}>
-               <h2 style={{ marginBottom: '24px', fontFamily: 'Cairo, sans-serif' }}>أرسل رسالة سريعة</h2>
-               <form style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <input type="text" placeholder="الاسم" style={{ padding: '14px', borderRadius: '12px', border: '1px solid var(--surface-border)', background: 'var(--bg)' }} />
-                  <textarea placeholder="رسالتك..." rows="4" style={{ padding: '14px', borderRadius: '12px', border: '1px solid var(--surface-border)', background: 'var(--bg)', resize: 'none' }}></textarea>
-                  <button type="button" className="btn-primary" style={{ width: '100%' }}>إرسال الآن</button>
-               </form>
             </div>
          </div>
       </main>
 
-      <footer className="site-footer reveal"><div>© 2026 {settings.brandName}</div></footer>
+      <footer className="site-footer reveal">
+        <div>© 2026 {settings.brandName} — جميع الحقوق محفوظة</div>
+      </footer>
 
       <style jsx>{`
-         .contact-card-link {
-            display: block;
-            padding: 24px;
-            background: var(--bg-soft);
-            border: 1px solid var(--surface-border);
-            border-radius: 20px;
-            transition: all 0.3s ease;
-         }
-         .contact-card-link:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: var(--shadow);
-         }
-         .contact-card-content { display: flex; align-items: center; gap: 20px; }
-         .contact-icon {
-            width: 50px; height: 50px; border-radius: 12px; background: var(--primary-soft);
-            display: grid; place-items: center; font-size: 1.5rem;
-         }
-         .contact-text small { display: block; color: var(--text-soft); font-size: 0.8rem; margin-bottom: 2px; }
-         .contact-text strong { display: block; fontSize: 1.1rem; }
-         
-         .social-btn {
-            padding: 12px 24px; border-radius: 12px; border: 1px solid var(--surface-border);
-            background: var(--bg-soft); font-weight: 700; transition: all 0.3s ease;
-         }
-         .social-btn:hover { background: var(--primary-soft); color: var(--primary); border-color: var(--primary); }
+        .contact-main { padding: 80px 0; max-width: 800px; margin: 0 auto; text-align: center; }
+        .contact-header h1 { font-family: Cairo, sans-serif; font-size: 3.5rem; margin-bottom: 16px; color: var(--text-main); }
+        .contact-header p { font-size: 1.2rem; color: var(--text-soft); margin-bottom: 60px; }
 
-         @media (max-width: 992px) {
-            .contact-grid-wrapper { grid-template-columns: 1fr; }
-         }
+        .contact-container {
+           background: var(--bg-soft);
+           padding: 60px 40px;
+           border-radius: 40px;
+           border: 1px solid var(--surface-border);
+           box-shadow: var(--shadow);
+        }
+
+        .contact-info-list { display: flex; flex-direction: column; gap: 24px; }
+
+        .contact-hub-card {
+           display: flex;
+           align-items: center;
+           gap: 24px;
+           padding: 30px;
+           background: var(--surface);
+           border-radius: 24px;
+           border: 1px solid var(--surface-border);
+           transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+           text-align: right;
+        }
+
+        .contact-hub-card:hover { 
+           transform: translateY(-8px) scale(1.02);
+           border-color: var(--primary);
+           box-shadow: 0 20px 40px var(--primary-glow);
+        }
+
+        .hub-icon {
+           width: 64px; height: 64px; border-radius: 18px;
+           background: var(--primary-soft);
+           display: grid; place-items: center;
+           font-size: 1.8rem;
+        }
+
+        .hub-details { display: flex; flex-direction: column; gap: 4px; }
+        .hub-label { font-size: 0.9rem; color: var(--text-muted); font-weight: 700; }
+        .hub-value { font-size: 1.25rem; font-weight: 800; color: var(--text-main); }
+
+        .social-links-grid {
+           display: grid;
+           grid-template-columns: repeat(3, 1fr);
+           gap: 16px;
+           margin-top: 20px;
+        }
+
+        .social-link-item {
+           padding: 16px;
+           background: var(--surface);
+           border: 1px solid var(--surface-border);
+           border-radius: 16px;
+           font-weight: 800;
+           font-size: 0.95rem;
+           transition: all 0.3s ease;
+        }
+
+        .social-link-item:hover {
+           background: var(--primary);
+           color: white !important;
+           border-color: var(--primary);
+           transform: translateY(-4px);
+        }
+
+        @media (max-width: 768px) {
+           .contact-main { padding: 40px 20px; }
+           .contact-header h1 { font-size: 2.5rem; }
+           .contact-container { padding: 40px 20px; border-radius: 30px; }
+           .contact-hub-card { padding: 20px; gap: 16px; }
+           .hub-icon { width: 50px; height: 50px; font-size: 1.4rem; }
+           .hub-value { font-size: 1.1rem; }
+           .social-links-grid { grid-template-columns: 1fr; }
+        }
       `}</style>
     </div>
   );
